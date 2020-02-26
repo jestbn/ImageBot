@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace ImageBot
@@ -13,7 +14,7 @@ Ingrese numero de imagenes a crear");
 
             string numerodeimagenes = Console.ReadLine();
 
-            LimpiarCarpeta();
+            //LimpiarCarpeta();  //Generado para limpiar carpeta en posterior uso
 
             GenerarImagen(Convert.ToInt32(numerodeimagenes));
 
@@ -23,46 +24,47 @@ Ingrese numero de imagenes a crear");
         private static void GenerarImagen( int numerodeimagenes)
         {
             //dimenciones
-            int width = 1000, height = 1000;
+            int width = 500, height = 500;
 
             try
             {
                 //bitmap
-                Bitmap bmp = new Bitmap(width, height);
-                
-                for (int i = 0; i < numerodeimagenes; i++)
+                using (Bitmap bmp = new Bitmap(width, height))
                 {
-                    //random number
-                    Random rand = new Random();
-                    //generate random ARGB value
-                    int a = rand.Next(256);
-                    int r = rand.Next(256);
-                    int g = rand.Next(256);
-                    int b = rand.Next(256);
-
-                    //create random pixels
-                    for (int y = 0; y < height; y++)
+                    for (int i = 0; i < numerodeimagenes; i++)
                     {
-                        for (int x = 0; x < width; x++)
+                        //random number
+                        Random rand = new Random();
+                        //generate random ARGB value
+                        int a = rand.Next(256);
+                        int r = rand.Next(256);
+                        int g = rand.Next(256);
+                        int b = rand.Next(256);
+
+                        //create random pixels
+                        for (int y = 0; y < height; y++)
                         {
-
-
-                            //set ARGB value
-                            bmp.SetPixel(x, y, Color.FromArgb(a, r, g, b));
+                            for (int x = 0; x < width; x++)
+                            {
+                                //set ARGB value
+                                bmp.SetPixel(x, y, Color.FromArgb(a, r, g, b));
+                            }
                         }
-                    }
-                    //Guardar el bitmap
-                    var rutaimagen = @"C:\Users\juane\Desktop\imagenes_prueba\"+ i.ToString()+ ".jpg";
+                        //Guardar el bitmap
+                        int numerolegible = i + 1;
+                        var rutaimagen = @"C:\Users\juane\Desktop\imagenes_prueba\" + numerolegible + ".jpg";
 
-                    bmp.Save(rutaimagen);
+                        Console.WriteLine(numerolegible);
+                        bmp.Save(rutaimagen);
+                    }
                 }
-                
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Ha ocurrido una excepcion {e.ToString()}");
             }
         }
+
 
         private static void LimpiarCarpeta()
         {
@@ -77,5 +79,6 @@ Ingrese numero de imagenes a crear");
                 dir.Delete(true);
             }
         }
+
     }
 }
